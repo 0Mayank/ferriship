@@ -22,14 +22,22 @@ fn setup(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<ColorMaterial>>,
-    mut windows: ResMut<Windows>,
+    mut windows: Res<Windows>,
 ) {
+    let window = windows.get_primary().unwrap();
+
     // camera
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 
     // spawn a sprite
+    let bottom = -window.height() / 2.;
     commands.spawn_bundle(SpriteBundle {
         material: materials.add(asset_server.load(PLAYER_SPRITE).into()),
+        transform: Transform {
+            translation: Vec3::new(0., bottom + 75. / 4. + 5., 10.),
+            scale: Vec3::new(0.5, 0.5, 1.),
+            ..Default::default()
+        },
         ..Default::default()
     });
 }
